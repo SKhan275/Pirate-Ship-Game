@@ -1,0 +1,69 @@
+[gd_scene load_steps=8 format=3 uid="uid://4t46xvs3dux3"]
+
+[ext_resource type="Texture2D" uid="uid://dwukooxt36rs6" path="res://Pirates Theme/PNG/Default size/Ship parts/cannon.png" id="1_jlypo"]
+[ext_resource type="Script" path="res://enemycannon.gd" id="1_t0q6a"]
+[ext_resource type="Texture2D" uid="uid://bemf4hvnpcv8d" path="res://Pirates Theme/PNG/Default size/Effects/fire1.png" id="2_efkt0"]
+[ext_resource type="PackedScene" uid="uid://rv30bfsajdgf" path="res://Ecannon_ball.tscn" id="2_pq5te"]
+[ext_resource type="Texture2D" uid="uid://tck0ilci1kl3" path="res://Pirates Theme/PNG/Default size/Effects/fire2.png" id="3_r3pj2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o1trg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_efkt0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_r3pj2")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"load",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_700qv"]
+size = Vector2(24, 16)
+
+[node name="enemycannon" type="Area2D"]
+script = ExtResource("1_t0q6a")
+CbObj = ExtResource("2_pq5te")
+
+[node name="Cannon" type="Sprite2D" parent="."]
+texture = ExtResource("1_jlypo")
+
+[node name="Muzzle" type="Marker2D" parent="Cannon"]
+
+[node name="Fire" type="AnimatedSprite2D" parent="Cannon/Muzzle"]
+position = Vector2(33, 1)
+rotation = 1.5708
+sprite_frames = SubResource("SpriteFrames_o1trg")
+animation = &"fire"
+autoplay = "fire"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, 0)
+shape = SubResource("RectangleShape2D_700qv")
+
+[node name="CoolDown" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+autostart = true
+
+[node name="DetectRadius" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectRadius"]
+
+[node name="insight" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="insight"]
+polygon = PackedVector2Array(16, -8, 152, -32, 184, 0, 152, 24, 16, 8)
+
+[connection signal="animation_finished" from="Cannon/Muzzle/Fire" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="DetectRadius" to="." method="_on_DetectRadius_body_entered"]
+[connection signal="body_exited" from="DetectRadius" to="." method="_on_DetectRadius_body_exited"]
+[connection signal="body_entered" from="insight" to="." method="_on_InSight_body_entered"]
+[connection signal="body_exited" from="insight" to="." method="_on_InSight_body_exited"]

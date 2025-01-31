@@ -1,0 +1,12 @@
+res://player.tscn
+res://world.tscn
+res://explosion.tscn
+res://enemy.tscn
+res://enemycannon.tscn
+res://coin.tscn
+res://Ecannon_ball.tscn
+res://Ecannon_ball.gd
+res://player.gd
+res://Start.gd
+res://world.gd
+res://start.tscn

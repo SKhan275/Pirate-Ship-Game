@@ -1,0 +1,70 @@
+[gd_scene load_steps=10 format=3 uid="uid://djv2fpcg47bjn"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_2sdln"]
+[ext_resource type="Texture2D" uid="uid://ceen4u8o6tln5" path="res://Pirates Theme/PNG/Default size/Ship parts/hullLarge (1).png" id="2_0yvt7"]
+[ext_resource type="PackedScene" uid="uid://duf28radt70br" path="res://cannon_ball.tscn" id="2_gs3fu"]
+[ext_resource type="Texture2D" uid="uid://0ogqbnsa1h17" path="res://Pirates Theme/PNG/Default size/Ship parts/sailLarge (8).png" id="3_uwwr4"]
+[ext_resource type="Texture2D" uid="uid://dwukooxt36rs6" path="res://Pirates Theme/PNG/Default size/Ship parts/cannon.png" id="4_qfpd7"]
+[ext_resource type="Texture2D" uid="uid://dqk7x1a5xhntf" path="res://Pirates Theme/PNG/Retina/Effects/fire1.png" id="5_pwa1x"]
+[ext_resource type="Texture2D" uid="uid://d0rekdj4tpk6p" path="res://Pirates Theme/PNG/Retina/Effects/fire2.png" id="6_cmuan"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_21fnu"]
+radius = 55.1453
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_v4iv7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_pwa1x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_cmuan")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"load",
+"speed": 5.0
+}]
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
+script = ExtResource("1_2sdln")
+CannonBall = ExtResource("2_gs3fu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_21fnu")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="CoolDown" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+autostart = true
+
+[node name="HullLarge" type="Sprite2D" parent="."]
+rotation = -1.5708
+texture = ExtResource("2_0yvt7")
+
+[node name="SailLarge" type="Sprite2D" parent="."]
+position = Vector2(-18, 0)
+rotation = -1.5708
+texture = ExtResource("3_uwwr4")
+
+[node name="Cannon" type="Sprite2D" parent="."]
+position = Vector2(42, 0)
+texture = ExtResource("4_qfpd7")
+
+[node name="Fire" type="AnimatedSprite2D" parent="Cannon"]
+position = Vector2(32, 0)
+rotation = 1.5708
+sprite_frames = SubResource("SpriteFrames_v4iv7")
+animation = &"load"
+autoplay = "fire"
+
+[node name="Muzzle" type="Marker2D" parent="Cannon"]
+
+[connection signal="timeout" from="CoolDown" to="." method="_on_cool_down_timeout"]
+[connection signal="animation_finished" from="Cannon/Fire" to="." method="_on_animated_sprite_2d_animation_finished"]
